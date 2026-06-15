@@ -66,17 +66,19 @@
             0% { transform: translateY(0) rotate(0); }
             100% { transform: translateY(100vh) rotate(720deg); }
         }
-        .audio-container {
+        #musicBtn {
             position: fixed;
-            top: 10px;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            z-index: -1;
-            opacity: 0;
-        }
-        audio {
-            display: none;
+            top: 15px;
+            right: 15px;
+            z-index: 9999;
+            background: black;
+            color: white;
+            border: 2px solid white;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 22px;
+            cursor: pointer;
         }
         .nav-ring {
             position: absolute;
@@ -135,6 +137,11 @@
         .image-container.fast {
             animation: spin-fast 2s linear infinite;
         }
+        .confetti {
+            width: 10px;
+            height: 10px;
+            background-color: yellow;
+        }
         .confetti, .falling-image, .falling-text {
             position: absolute;
             animation: confetti 5s linear infinite;
@@ -147,6 +154,52 @@
         .falling-text {
             font-size: 24px;
             color: yellow;
+        }
+        #intro {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: black;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;
+            transition: opacity 1s ease;
+        }
+        #intro h1 {
+            color: white;
+            font-size: 48px;
+            font-family: sans-serif;
+            letter-spacing: 6px;
+            animation: fadeInText 1.5s ease forwards;
+        }
+        #intro p {
+            color: #aaa;
+            font-size: 18px;
+            font-family: sans-serif;
+            margin-top: 10px;
+            animation: fadeInText 2s ease forwards;
+        }
+        #enterBtn {
+            margin-top: 30px;
+            padding: 12px 30px;
+            font-size: 18px;
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+            cursor: pointer;
+            letter-spacing: 3px;
+            font-family: sans-serif;
+            animation: fadeInText 2.5s ease forwards;
+        }
+        #enterBtn:hover {
+            background: white;
+            color: black;
+        }
+        @keyframes fadeInText {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         #confettiContainer {
             position: fixed;
@@ -161,16 +214,19 @@
     </style>
 </head>
 <body>
-    <div class="audio-container">
-        <audio autoplay loop>
-            <source src="ReelAudio-48453_223233.mp3" type="audio/mpeg">
-            Your browser does not support the audio element.
-        </audio>
+    <div id="intro">
+        <h1>BAHIA</h1>
+        <p>bem vindo ao site</p>
+        <button id="enterBtn" onclick="enterSite()">ENTRAR</button>
     </div>
+    <audio id="bgMusic" loop>
+        <source src="ReelAudio-48453_223233.mp3" type="audio/mpeg">
+    </audio>
+    <button id="musicBtn" onclick="toggleMusic()">🔇</button>
     <div class="nav-ring">
         <a href="#home" onclick="jumpToCauldron('images.jpg')">Home</a>
         <a href="#about" onclick="jumpToCauldron('original.jpg')">About</a>
-        <a href="#services" onclick="jumpToCauldron('shadow.jpg')">Services</a>
+        <a href="#services" onclick="jumpToCauldron('Shadow.jpg')">Services</a>
         <a href="#portfolio" onclick="jumpToCauldron('flops.jpg')">Portfolio</a>
         <a href="#contact" onclick="jumpToCauldron('tiririca.jpg')">Contact</a>
     </div>
@@ -178,7 +234,7 @@
     <div class="image-container" id="imageContainer">
         <img src="images.jpg" alt="Imagem" class="image" id="image1">
         <img src="original.jpg" alt="Imagem" class="image" id="image2">
-        <img src="shadow.jpg" alt="Imagem" class="image" id="image3">
+        <img src="Shadow.jpg" alt="Imagem" class="image" id="image3">
         <img src="flops.jpg" alt="Imagem" class="image" id="image4">
         <img src="tiririca.jpg" alt="Imagem" class="image" id="image5">
     </div>
@@ -197,7 +253,7 @@
 
         function createFallingImages() {
             const confettiContainer = document.getElementById('confettiContainer');
-            const images = ['images.jpg', 'original.jpg', 'shadow.jpg', 'Nutella.jpeg', 'tiririca.jpg'];
+            const images = ['images.jpg', 'original.jpg', 'Shadow.jpg', 'roblox.jpg', 'tiririca.jpg'];
             for (let i = 0; i < 20; i++) {
                 const img = document.createElement('img');
                 img.src = images[Math.floor(Math.random() * images.length)];
@@ -241,6 +297,26 @@
             setTimeout(() => {
                 container.classList.remove('fast');
             }, 2000);
+        }
+
+        const music = document.getElementById('bgMusic');
+        const btn = document.getElementById('musicBtn');
+
+        function enterSite() {
+            const intro = document.getElementById('intro');
+            intro.style.opacity = '0';
+            setTimeout(() => intro.style.display = 'none', 1000);
+            music.play();
+            btn.textContent = '🔊';
+        }
+        function toggleMusic() {
+            if (music.paused) {
+                music.play();
+                btn.textContent = '🔊';
+            } else {
+                music.pause();
+                btn.textContent = '🔇';
+            }
         }
 
         // Function to refresh the page every 5 minutes (300,000 milliseconds)
